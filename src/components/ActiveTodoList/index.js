@@ -2,49 +2,55 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Checkbox from "@mui/material/Checkbox";
+
 const ActiveTodoList = (props) => {
   const { todoItems, deleteTodo, completeTodo } = props;
 
   return (
     <Box
-    width="400px"
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    border="1px solid lightGrey"
-  >
-    <Typography variant="h6">Active Items</Typography>
-
-    <Box
-      m={1}
-      p={1}
+      width="400px"
       display="flex"
-      justifyContent="center"
+      p={1}
       flexDirection="column"
-      maxWidth="300px"
-      alignSelf="center"
+      alignItems="flex-start"
+      border="1px solid lightGrey"
     >
-      {todoItems.length>0 && todoItems.map((item, index) => (
-        <Box 
-          key={index}
-          m={1}
-          p={1}
-          display="flex"
-          justifyContent="space-between"
-          alignSelf="center"
-        >
-          <Button variant="contained" onClick={()=>completeTodo(item.text)}>
-            Complete
-          </Button>
-          <Box mx={2} />
-          <Box mx={2}> {item.text}</Box>
-          <Box mx={2} />
-          <Button variant="contained" onClick={()=>deleteTodo(item.text)}>
-            Delete
-          </Button>
-        </Box>
-      ))}
-    </Box>
+      <Typography variant="h6">Active Items</Typography>
+
+      <Box
+       mt={2}
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        width="100%"
+        alignSelf="center"
+      >
+        {todoItems.length > 0 &&
+          todoItems.map((item) => (
+            <Box
+              key={item.id}
+              py={1}
+              width="100%"
+              display="flex"
+              justifyContent="space-between"
+              borderBottom="1px solid lightGrey"
+              alignItems="center"
+              alignSelf="center"
+            >
+              <Checkbox
+                onChange={() => completeTodo(item)}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+              <Box mx={2} />
+              <Box mx={2}> {item.todo}</Box>
+              <Box mx={2} />
+              <Button variant="contained" onClick={() => deleteTodo(item)}>
+                Delete
+              </Button>
+            </Box>
+          ))}
+      </Box>
     </Box>
   );
 };

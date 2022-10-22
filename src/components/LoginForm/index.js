@@ -9,7 +9,7 @@ function App(props) {
   const [username, setUsername] = React.useState();
 
   return (
-    <Box m={2} display="flex" flexDirection="column" alignItems="center">
+    <Box m={1} p={1} display="flex" flexDirection="column" alignItems="center">
       <Typography variant="h3">ToDo App</Typography>
 
       <Box

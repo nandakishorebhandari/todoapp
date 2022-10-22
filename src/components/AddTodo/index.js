@@ -9,20 +9,20 @@ function App(props) {
 
   return (
     <Box
+      p={1}
       width="400px"
       display="flex"
       flexDirection="column"
-      alignItems="center"
+      alignItems="flex-start"
       border="1px solid lightGrey"
     >
       <Typography variant="h6">Add Item</Typography>
 
       <Box
-        m={1}
-        p={1}
+        mt={2}
         display="flex"
         justifyContent="space-between"
-        alignSelf="center"
+        width="100%"
       >
         <TextField
           id="outlined-basic"

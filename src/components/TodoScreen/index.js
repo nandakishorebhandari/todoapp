@@ -1,68 +1,83 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import axios from "axios";
+import Typography from "@mui/material/Typography";
+
 import AddTodo from "../AddTodo";
 import LoginForm from "../LoginForm";
 import CompletedTodoList from "../CompletedTodoList";
 import ActiveTodoList from "../ActiveTodoList";
+
+const baseURL = "http://localhost:3010";
+
 function App() {
   const [todoItems, setTodoItems] = React.useState([]);
   const [username, setUsername] = React.useState();
   const [completeTodoItems, setCompleteTodoItems] = React.useState([]);
 
-  React.useEffect(() => {
-    //ToDo: Fetch Items from API with username
-    const items = [
-      { text: "dasd1", username: "nanda", createdAt: new Date().getTime() },
-      { text: "dasd2", username: "nanda", createdAt: new Date().getTime() },
-      { text: "dasd3", username: "nanda", createdAt: new Date().getTime() },
-      { text: "dasd4", username: "nanda", createdAt: new Date().getTime() },
-    ];
+  const fetchItems = () => {
+    // Fetch Items from API with username
+    const URL = baseURL + `/todos?username=${username}`;
+    axios.get(URL).then((response) => {
+      const activeItems = response.data.filter(
+        (item) => item.status === "active"
+      );
+      const completeItems = response.data.filter(
+        (item) => item.status === "complete"
+      );
+      setTodoItems(activeItems);
+      setCompleteTodoItems(completeItems);
+    });
+  };
 
-    if (username === "nanda") {
-      setTodoItems(items);
-    }
-  }, [username]);
+  const addTask = (todoItem) => {
+    const item = { todo: todoItem, username, status: "active" };
+
+    //Add Item from API
+    const URL = baseURL + `/todos`;
+    const postData = item;
+    axios.post(URL, postData).then((response) => {
+      console.log(response.data.todo + " new todo item to be added");
+      fetchItems();
+    });
+  };
+  const deleteTodo = (todoItem) => {
+    //Delete Item from API
+    const URL = baseURL + `/todos/${todoItem.id}`;
+    axios.delete(URL).then((response) => {
+      console.log("item deleted");
+      fetchItems();
+    });
+  };
+  const completeTodo = (todoItem) => {
+    // Update Item from API
+    const URL = baseURL + `/todos/${todoItem.id}`;
+    const putData = { status: "complete" };
+    axios.put(URL, putData).then((response) => {
+      console.log(response.data.todo + "  item updated");
+      fetchItems();
+    });
+  };
   const performLogin = (user) => {
     setUsername(user);
     console.log(user + " tried to login");
   };
+
   const performLogout = () => {
     setUsername();
     console.log(username + " tried to logout");
   };
-  const addTask = (todoItem) => {
-    const item = { text: todoItem, username, createdAt: new Date().getTime() };
-    const newItems = todoItems.slice();
-    newItems.push(item);
-    setTodoItems(newItems);
-    console.log(newItems, todoItem + " new todo item to be added");
 
-    //ToDo: Add Item from API
-  };
-  const deleteTodo = (todoItem) => {
-    const newItems = todoItems.slice().filter((todo) => todo.text !== todoItem);
-    setTodoItems(newItems);
-    console.log(newItems + " new todo item to be deleted");
-
-    //ToDo: Delete Item from API
-  };
-  const completeTodo = (todoItem) => {
-    const compltedItem = todoItems
-      .slice()
-      .filter((todo) => todo.text == todoItem)[0];
-    const newItems = todoItems.slice().filter((todo) => todo.text !== todoItem);
-    setTodoItems(newItems);
-    const newCompletedTodoItems = completeTodoItems.slice();
-    newCompletedTodoItems.push(compltedItem);
-    setCompleteTodoItems(newCompletedTodoItems);
-    console.log(compltedItem.text + " new todo item to be completed");
-
-    //ToDo: Update Item from API
-  };
+  React.useEffect(() => {
+    if (username) {
+      fetchItems();
+    }
+  }, [username]);
 
   return (
     <Box
+      m={1}
       p={1}
       border="1px solid lightGrey"
       display="flex"
@@ -82,16 +97,25 @@ function App() {
       )}
       {username && (
         <Box
-          m={1}
-          p={1}
           display="flex"
           justifyContent="center"
           flexDirection="column"
           alignSelf="center"
         >
-          <Button variant="text" onClick={performLogout}>
-            Logout
-          </Button>
+          <Box m={2} display="flex" flexDirection="column" alignItems="center">
+            <Typography variant="h3">ToDo App</Typography>
+          </Box>
+
+          <Box
+            display="flex"
+            alighItems="center"
+            justifyContent="space-between"
+          >
+            <h4>{username}</h4>
+            <Button variant="text" onClick={performLogout}>
+              Logout
+            </Button>
+          </Box>
           <AddTodo addTask={addTask} />
           <Box my={2} />
           <ActiveTodoList
