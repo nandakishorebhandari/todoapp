@@ -8,6 +8,7 @@ import AddTodo from "../AddTodo";
 import LoginForm from "../LoginForm";
 import CompletedTodoList from "../CompletedTodoList";
 import ActiveTodoList from "../ActiveTodoList";
+import AllTodoList from "../AllTodoList";
 
 const baseURL = "http://localhost:3010";
 
@@ -108,13 +109,29 @@ function App() {
 
           <Box
             display="flex"
-            alighItems="center"
+            alignItems="center"
             justifyContent="space-between"
           >
             <h4>{username}</h4>
-            <Button variant="text" onClick={performLogout}>
-              Logout
-            </Button>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <AllTodoList
+                completeTodoItems={completeTodoItems}
+                todoItems={todoItems}
+              />
+              <Box mx={1} />
+              <Button
+                size="small"
+                variant="outlined"
+                color="primary"
+                onClick={performLogout}
+              >
+                Logout
+              </Button>
+            </Box>
           </Box>
           <AddTodo addTask={addTask} />
           <Box my={2} />

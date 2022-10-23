@@ -3,9 +3,27 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
 const ActiveTodoList = (props) => {
   const { todoItems, deleteTodo, completeTodo } = props;
+  const [open, setOpen] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState();
+
+  const handleDialogClose = () => {
+    setSelectedItem();
+    setOpen(false);
+  };
+  const handleDeleteItem = () => {
+    deleteTodo(selectedItem);
+    setSelectedItem();
+    setOpen(false);
+  };
+  const handleDialogOpen = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
 
   return (
     <Box
@@ -17,9 +35,24 @@ const ActiveTodoList = (props) => {
       border="1px solid lightGrey"
     >
       <Typography variant="h6">Active Items</Typography>
-
+      <Dialog
+        open={open}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want the delete the tod item?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>No</Button>
+          <Button onClick={handleDeleteItem} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Box
-       mt={2}
+        mt={2}
         display="flex"
         justifyContent="center"
         flexDirection="column"
@@ -45,7 +78,10 @@ const ActiveTodoList = (props) => {
               <Box mx={2} />
               <Box mx={2}> {item.todo}</Box>
               <Box mx={2} />
-              <Button variant="contained" onClick={() => deleteTodo(item)}>
+              <Button
+                variant="contained"
+                onClick={() => handleDialogOpen(item)}
+              >
                 Delete
               </Button>
             </Box>

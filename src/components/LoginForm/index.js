@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import AdminTodoUserList from "../AdminTodoUserList"
 
 function App(props) {
   const { performLogin } = props;
@@ -17,6 +18,7 @@ function App(props) {
         p={1}
         display="flex"
         justifyContent="space-between"
+        alignItems="center"
         maxWidth="300px"
         alignSelf="center"
       >
@@ -25,6 +27,7 @@ function App(props) {
           label="Username"
           variant="outlined"
           value={username}
+          size="small"
           fullWidth
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -33,6 +36,7 @@ function App(props) {
           Login
         </Button>
       </Box>
+      <AdminTodoUserList/>
     </Box>
   );
 }

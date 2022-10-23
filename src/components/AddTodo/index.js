@@ -22,6 +22,7 @@ function App(props) {
         mt={2}
         display="flex"
         justifyContent="space-between"
+        alignItems="center"
         width="100%"
       >
         <TextField
@@ -30,6 +31,7 @@ function App(props) {
           variant="outlined"
           value={todoItem}
           fullWidth
+          size="small"
           onChange={(e) => setTodoItem(e.target.value)}
         />
         <Box mx={2} />
