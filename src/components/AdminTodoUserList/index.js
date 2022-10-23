@@ -18,13 +18,15 @@ const ActiveTodoList = (props) => {
   const [userTodoItems, setUserTodoItems] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
-    // Fetch Items from API with username
-    const URL = baseURL + `/todos/admin`;
-    axios.get(URL).then((response) => {
-      setUserTodoItems(response.data);
-    });
-  }, []);
-  
+    if (open) {
+      // Fetch Items from API with username
+      const URL = baseURL + `/todos/admin`;
+      axios.get(URL).then((response) => {
+        setUserTodoItems(response.data);
+      });
+    }
+  }, [open]);
+
   return (
     <Box display="flex" mt={4} justifyContent="center">
       <Button
@@ -42,7 +44,14 @@ const ActiveTodoList = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"All Users Todo Items"}</DialogTitle>
+        <Box display="flex" justifyContent="space-between" pr={2} alignItems="center">
+          <DialogTitle id="alert-dialog-title">
+            {"All Users Todo Items"}
+          </DialogTitle>
+          <Button onClick={() => setOpen(false)} size="small" >
+            Close
+          </Button>
+        </Box>
         <Box
           mt={2}
           display="flex"
@@ -56,9 +65,9 @@ const ActiveTodoList = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell>id</TableCell>
-                  <TableCell >Username</TableCell>
-                  <TableCell >Status</TableCell>
-                  <TableCell >Todo</TableCell>
+                  <TableCell>Username</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Todo</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -70,9 +79,9 @@ const ActiveTodoList = (props) => {
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
-                    <TableCell >{row.username}</TableCell>
-                    <TableCell >{row.status}</TableCell>
-                    <TableCell >{row.todo}</TableCell>
+                    <TableCell>{row.username}</TableCell>
+                    <TableCell>{row.status}</TableCell>
+                    <TableCell>{row.todo}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
-
+import Snackbar from '@mui/material/Snackbar';
 import AddTodo from "../AddTodo";
 import LoginForm from "../LoginForm";
 import CompletedTodoList from "../CompletedTodoList";
@@ -16,6 +16,7 @@ function App() {
   const [todoItems, setTodoItems] = React.useState([]);
   const [username, setUsername] = React.useState();
   const [completeTodoItems, setCompleteTodoItems] = React.useState([]);
+  const [openSnack, setOpenSnack] = React.useState(false);
 
   const fetchItems = () => {
     // Fetch Items from API with username
@@ -35,6 +36,15 @@ function App() {
   const addTask = (todoItem) => {
     const item = { todo: todoItem, username, status: "active" };
 
+    //Check if it is duplicate
+
+    const isDuplicate = todoItems.filter(item=>item.todo === todoItem)[0]
+
+    if(isDuplicate){
+      setOpenSnack(true)
+      return
+    }
+    
     //Add Item from API
     const URL = baseURL + `/todos`;
     const postData = item;
@@ -78,14 +88,13 @@ function App() {
 
   return (
     <Box
-      m={1}
-      p={1}
+      m={2}
+      p={2}
       border="1px solid lightGrey"
       display="flex"
       justifyContent="flex-start"
       flexDirection="column"
       width="600px"
-      height="800px"
       margin="16px auto"
       alignSelf="center"
     >
@@ -144,6 +153,12 @@ function App() {
           <CompletedTodoList completeTodoItems={completeTodoItems} />
         </Box>
       )}
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={2000}
+        onClose={()=>setOpenSnack(false)}
+        message="Todo item already exist."
+      />
     </Box>
   );
 }
