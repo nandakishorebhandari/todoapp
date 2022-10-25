@@ -10,7 +10,8 @@ import CompletedTodoList from "../CompletedTodoList";
 import ActiveTodoList from "../ActiveTodoList";
 import AllTodoList from "../AllTodoList";
 
-const baseURL = "http://localhost:3010";
+// const baseURL = "http://localhost:3010";
+const baseURL = "https://nw-todo-backend.herokuapp.com";
 
 function App() {
   const [todoItems, setTodoItems] = React.useState([]);
